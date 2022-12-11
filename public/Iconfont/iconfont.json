@@ -1,0 +1,16 @@
+{
+  "id": "3727656",
+  "name": "e宠物",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "32096249",
+      "name": "消息提醒",
+      "font_class": "xiaoxitixing",
+      "unicode": "e6b4",
+      "unicode_decimal": 59060
+    }
+  ]
+}
