@@ -6,13 +6,15 @@
                 <p>{{ item.title }}:</p>
                 <div v-if="item.is_img === 0">
                     <template v-if="item.checkbox === 0">
-                        <van-button size="small" :class="{ choicebtn: this.allids[index].indexOf(btn.cid) != -1 }"
+                        <van-button size="small"
+                            :class="{ choicebtn: this.allids[index] && this.allids[index].indexOf(btn.cid) != -1 }"
                             v-for="btn in item.list" :key="btn.cid" round type="default"
                             @click.prevent="changeCid(btn.cid, index, 0)">{{ btn.title
                             }}</van-button>
                     </template>
                     <template v-if="item.checkbox === 1">
-                        <van-button size="small" :class="{ choicebtn: this.allids[index].indexOf(btn.cid) != -1 }"
+                        <van-button size="small"
+                            :class="{ choicebtn: this.allids[index] && this.allids[index].indexOf(btn.cid) != -1 }"
                             v-for="btn in item.list" :key="btn.cid" round type="default"
                             @click.prevent="changeCid(btn.cid, index, 1)">{{ btn.title
                             }}</van-button>
@@ -24,7 +26,7 @@
                             backgroundImage: `url(${btn.img})`
                         }" @click="changeImgCid(btn, index, 2)">
                             <div v-if="imgClass(btn.cid, index)" class="img-btn-shade">
-
+                                <van-icon name="checked" size="2rem" color="#30abb3" />
                             </div>
                         </div>
                     </template>
@@ -62,7 +64,8 @@ export default {
             default: 0,
         },
         detailList: {
-            type: Array
+            type: Array,
+            default: () => [],
         }
     },
     inject: ['ids', 'no_ids'],
@@ -117,23 +120,31 @@ export default {
         }
     },
     watch: {
-        detailList() {
-            for (let i = 0; i < this.allids.length; i++) {
-                this.ids.push(...this.allids[i]);
-            }
-            this.allids = [];
-            for (let i = 0; i < this.detailList.length; i++) {
-                this.allids.push([]);
-                let { list } = this.detailList
-                for (let j = 0; j < list.length; j++) {
-                    if (this.ids.indexOf(list[j].cid) == -1) {
-                        this.no_ids.push(list[j].cid)
+        detailList: {
+            handler() {
+                console.log(this.detailList)
+                console.log(this.allids)
+                if (!this.detailList)
+                    return
+                for (let i = 0; i < this.allids.length; i++) {
+                    this.ids.push(...this.allids[i]);
+                }
+                this.allids = [];
+                for (let i = 0; i < this.detailList.length; i++) {
+                    this.allids.push([]);
+                    if (!this.detailList[i].list)
+                        continue
+                    let { list } = this.detailList[i]
+                    for (let j = 0; j < list.length; j++) {
+                        if (this.ids.indexOf(list[j].cid) == -1) {
+                            this.no_ids.push(list[j].cid)
+                        }
                     }
+
                 }
 
-            }
-
-
+            },
+            deep: true,
         }
     }
 };
@@ -195,7 +206,8 @@ export default {
         background-color: white;
         border: 1px solid black;
         border-radius: 20px;
-        padding: 1rem 1.5rem;
+        padding: 1rem 5px;
+        font-size: 1rem;
     }
 
     .choicebtn {

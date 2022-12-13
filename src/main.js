@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import { VueMasonryPlugin } from "vue-masonry";
+import "vant/lib/index.css";
 import router from "./router";
 import "../public/Iconfont/iconfont.css";
 import store from "./store";
@@ -29,6 +30,7 @@ import {
   Col,
   RadioGroup,
   Radio,
+  DatePicker,
   Tabbar,
   Sidebar,
   SidebarItem,
@@ -46,6 +48,7 @@ app.use(SwipeItem);
 app.use(TabbarItem);
 app.use(Popup);
 app.use(Tab);
+app.use(DatePicker);
 app.use(Tabs);
 app.use(Sidebar);
 app.use(Radio);

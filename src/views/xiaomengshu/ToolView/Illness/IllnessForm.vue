@@ -7,7 +7,6 @@
                     请选择{{ String(cidArray.map((item) => { return dateMap.get(item * 1) })) }}症状类型
                 </div>
             </div>
-
             <div class="main-form" v-show="isFirst">
 
                 <van-form @submit="onSubmit" label-width="6rem" input-align="right">
@@ -15,19 +14,24 @@
                         <h3>请填写基本信息</h3>
                         <van-field @click="choicePet_type" readonly v-model="pet_type.name" label="宠物品种"
                             placeholder="请选择宠物品种" />
-                        <template v-for="(item) in formList" :key="item.title">
+                        <template v-for="(item, index) in formList" :key="item.title">
                             <van-field v-if="item.type === 1 && item.list.length != 0" :label="item.title">
                                 <template #input>
                                     <div>
-                                        <van-radio-group v-model="checked" direction="horizontal" icon-size="1.5rem">
-                                            <van-radio name="1">{{ item.list[0].title }}</van-radio>
-                                            <van-radio name="2">{{ item.list[1].title }}</van-radio>
+                                        <van-radio-group v-model="formIds[index]" direction="horizontal"
+                                            icon-size="1.5rem">
+                                            <van-radio :name="item.list[0].cid"
+                                                @click="chageRadio(index, 0, item.list)">{{ item.list[0].title
+                                                }}</van-radio>
+                                            <van-radio :name="item.list[1].cid"
+                                                @click="chageRadio(index, 1, item.list)">{{ item.list[1].title
+                                                }}</van-radio>
                                         </van-radio-group>
                                     </div>
                                 </template>
                             </van-field>
-                            <van-field v-if="item.type === 2" readonly v-model="age" :label="item.title"
-                                placeholder="请选择宠物年龄" />
+                            <van-field @click="choicePet_age" v-if="item.type === 2" readonly v-model="ageString"
+                                :label="item.title" placeholder="请选择宠物年龄" />
 
                         </template>
 
@@ -58,11 +62,18 @@
                 </div>
 
                 <div class="choice">
-                    <index-bar v-model:id="pet_type" :choicelist="pet_typeList"></index-bar>
+                    <index-bar v-model:isShow="showChoicepet_type" v-model:bacObj="pet_type"
+                        :choicelist="pet_typeList"></index-bar>
                 </div>
+            </van-popup>
+            <van-popup class="ageClass" v-model:show="showChoicepet_age" position="bottom" round
+                :style="{ height: '60%' }">
+                <van-date-picker @cancel="this.showChoicepet_age = false" @confirm="changeAge" v-model="ageTime"
+                    title="选择日期" :max-date="new Date()" />
             </van-popup>
         </div>
     </van-config-provider>
+
 </template>
 
 <script>
@@ -73,6 +84,8 @@ export default {
     components: { DetailList, IndexBar },
     data() {
         return {
+            formIds: [],
+            formNo_ids: [],
             date: [],
             dateMap: new Map,
             pet_typeid: 0,
@@ -83,7 +96,8 @@ export default {
             pet_type: {},
             pet_typeList: [],
             showChoicepet_type: false,
-            age: '',
+            showChoicepet_age: false,
+            ageTime: new Array,
             choiceCid: 0,
             detailList: [],
             ids: [],
@@ -94,8 +108,7 @@ export default {
             },
             isFirst: true,
             againDetail: [],
-            againDetailNum: 10,
-
+            againDetailNum: -1,
         }
     },
     provide() {
@@ -105,6 +118,7 @@ export default {
         }
 
     },
+
     async created() {
         this.pet_typeid = this.$store.state.pet_typeid;
         await this.getList(0);
@@ -114,9 +128,15 @@ export default {
         const { cids: cidArray } = this.$route.query;
 
         this.cidArray = cidArray.split(",");
-        console.log(cidArray)
         await this.getFormList();
-        await this.getSySmptomList()
+        await this.getSySmptomList();
+        this.ageTime = [];
+
+    },
+    computed: {
+        ageString() {
+            return String(this.ageTime).replaceAll(',', '-');
+        }
     },
     methods: {
         async getList(site) {
@@ -144,7 +164,9 @@ export default {
             this.formList = res.data;
             console.log(this.formList)
         },
-
+        outpet_type() {
+            console.log(this.pet_type)
+        },
         //获取症状列表
         async getSySmptomList() {
             let res = await getIlnessList({
@@ -157,43 +179,61 @@ export default {
         async getDetailList() {
             let res = await getIlnessList({
                 do: "SymptomList",
-                cid: this.cid,
+                cid: this.choiceCid,
             });
             this.detailList = res.data;
-            this.allids.length = 0;
-            this.detailList.forEach(() => {
-                this.allids.push([]);
-            });
-            console.log(this.detailList);
+
         },
         changeCid(cid) {
             this.choiceCid = cid;
             this.getDetailList();
         },
+        //点击下一步
         async nextResult() {
-            if (this.isFirst || this.againDetailNum == -1) {
-                let res = await getIlnessList({
-                    do: "result",
-                    ids: String(this.ids),
-                    no_ids: String(this.no_ids),
-                });
-                if (this.isFirst) {
-                    this.againDetail = res.data.symptom_list
-                    this.againDetailNum = res.data.is_result;
-                    this.isFirst = false;
+            this.detailList.push([])
+            this.$nextTick(async () => {
+                console.log(111)
+                if (this.isFirst || this.againDetailNum == -1) {
+                    let res = await getIlnessList({
+                        do: "result",
+                        ids: String(this.ids),
+                        no_ids: String(this.no_ids),
+                        cid: this.choiceCid
+                    });
+                    if (this.isFirst) {
+                        this.againDetail = res.data.symptom_list
+                        this.againDetailNum = res.data.is_result - 1;
+                        this.isFirst = false;
+                    }
+                    if (this.againDetailNum != -1) {
+                        this.detailList = this.againDetail[this.againDetailNum].combination;
+                        this.againDetailNum--;
+                    }
                 }
-            }
-            else {
-                this.DetailList = this.againDetail[this.againDetailNum].combination;
-            }
+                else {
+                    this.detailList = this.againDetail[this.againDetailNum].combination;
+                    this.againDetailNum--;
+                }
+            })
+
 
         },
         async choicePet_type() {
             this.showChoicepet_type = true;
             let res = await getUserPet({ do: 'GetPettype' });
             this.pet_typeList = res.list;
+        },
+        choicePet_age() {
+            this.showChoicepet_age = true;
+        },
+        changeAge({ selectedValues }) {
+            this.ageTime = selectedValues
+            this.showChoicepet_age = false
+        },
+        chageRadio(index, type, list) {
+            this.formIds[index] = list[type].cid;
+            this.formNo_ids[index] = list[type ^ 1].cid;
         }
-
     }
 
 }
@@ -292,4 +332,8 @@ export default {
     }
 
 }
+
+.ageClass {}
 </style>
+
+2170
