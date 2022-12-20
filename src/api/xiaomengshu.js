@@ -24,3 +24,8 @@ export const getIlnessList = (params) => {
 export const getUserPet = (params) => {
   return xiaoms.post("/v3/user/pet/Main.html", params);
 };
+export const getpreviewList = (params) => {
+  return xiaoms.get("/v3/content/Tools/Disease/main.html", {
+    params,
+  });
+};

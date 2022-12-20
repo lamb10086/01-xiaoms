@@ -7,14 +7,14 @@
                 <div v-if="item.is_img === 0">
                     <template v-if="item.checkbox === 0">
                         <van-button size="small"
-                            :class="{ choicebtn: this.allids[index] && this.allids[index].indexOf(btn.cid) != -1 }"
+                            :class="{ choicebtn: this.allids[index] && (this.allids[index].indexOf(btn.cid) != -1 || this.ids.indexOf(btn.cid) != -1) }"
                             v-for="btn in item.list" :key="btn.cid" round type="default"
                             @click.prevent="changeCid(btn.cid, index, 0)">{{ btn.title
                             }}</van-button>
                     </template>
                     <template v-if="item.checkbox === 1">
                         <van-button size="small"
-                            :class="{ choicebtn: this.allids[index] && this.allids[index].indexOf(btn.cid) != -1 }"
+                            :class="{ choicebtn: this.allids[index] && (this.allids[index].indexOf(btn.cid) != -1 || this.ids.indexOf(btn.cid) != -1) }"
                             v-for="btn in item.list" :key="btn.cid" round type="default"
                             @click.prevent="changeCid(btn.cid, index, 1)">{{ btn.title
                             }}</van-button>
@@ -66,6 +66,10 @@ export default {
         detailList: {
             type: Array,
             default: () => [],
+        },
+        getAll: {
+            type: Number,
+            default: 0,
         }
     },
     inject: ['ids', 'no_ids'],
@@ -104,7 +108,9 @@ export default {
             }
         },
         imgClass(cid, index) {
-            if (this.allids[index].indexOf(cid) != -1)
+            console.log("imgClass", cid, index)
+            console.log("this.detailList", this.detailList)
+            if ((this.allids[index].indexOf(cid) != -1 || this.ids.indexOf(cid) != -1))
                 return true
             else
                 return false
@@ -120,31 +126,34 @@ export default {
         }
     },
     watch: {
-        detailList: {
-            handler() {
-                console.log(this.detailList)
-                console.log(this.allids)
-                if (!this.detailList)
-                    return
-                for (let i = 0; i < this.allids.length; i++) {
-                    this.ids.push(...this.allids[i]);
-                }
-                this.allids = [];
-                for (let i = 0; i < this.detailList.length; i++) {
-                    this.allids.push([]);
-                    if (!this.detailList[i].list)
-                        continue
-                    let { list } = this.detailList[i]
-                    for (let j = 0; j < list.length; j++) {
-                        if (this.ids.indexOf(list[j].cid) == -1) {
-                            this.no_ids.push(list[j].cid)
-                        }
+        getAll() {
+            console.log(this.detailList)
+            console.log("watch")
+            if (!this.detailList)
+                return
+            for (let i = 0; i < this.allids.length; i++) {
+                this.ids.push(...this.allids[i]);
+            }
+
+            for (let i = 0; i < this.detailList.length; i++) {
+                this.allids.push([]);
+                if (!this.detailList[i].list)
+                    continue
+                let { list } = this.detailList[i]
+                for (let j = 0; j < list.length; j++) {
+                    if (this.ids.indexOf(list[j].cid) == -1) {
+                        this.no_ids.push(list[j].cid)
                     }
-
                 }
 
-            },
-            deep: true,
+            }
+
+        },
+        detailList() {
+            this.allids = [];
+            for (let i = 0; i < this.detailList.length; i++) {
+                this.allids.push([]);
+            }
         }
     }
 };

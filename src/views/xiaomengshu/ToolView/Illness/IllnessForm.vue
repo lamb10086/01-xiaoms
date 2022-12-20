@@ -12,8 +12,8 @@
                 <van-form @submit="onSubmit" label-width="6rem" input-align="right">
                     <van-cell-group inset>
                         <h3>请填写基本信息</h3>
-                        <van-field @click="choicePet_type" readonly v-model="pet_type.name" label="宠物品种"
-                            placeholder="请选择宠物品种" />
+                        <van-field v-if="this.$route.query.pet_typeid == 0" @click="choicePet_type" readonly
+                            v-model="pet_type.name" label="宠物品种" placeholder="请选择宠物品种" />
                         <template v-for="(item, index) in formList" :key="item.title">
                             <van-field v-if="item.type === 1 && item.list.length != 0" :label="item.title">
                                 <template #input>
@@ -45,11 +45,11 @@
                         }}</van-button>
                 </div>
             </div>
-            <detail-list :cid="choiceCid" :detailList="detailList"></detail-list>
+            <detail-list :cid="choiceCid" :detailList="detailList" :getAll="getAll"></detail-list>
 
         </div>
         <div class="botton-btn">
-            <van-button round type="default" class="detailbutton">预览病症</van-button>
+            <van-button round type="default" @click="Preview()" class="detailbutton">预览病症</van-button>
             <van-button round type="default" @click="nextResult()" class="nextbutton">下一步</van-button>
         </div>
         <!-- 写dialog的div -->
@@ -71,15 +71,41 @@
                 <van-date-picker @cancel="this.showChoicepet_age = false" @confirm="changeAge" v-model="ageTime"
                     title="选择日期" :max-date="new Date()" />
             </van-popup>
+            <!-- 显示预览 -->
+            <van-popup class="pet_typeClass" v-model:show="showPreview" position="bottom" round
+                :style="{ height: '50%' }">
+                <div class="top">
+                    <h2>当前已选症状</h2>
+                    <hr>
+                </div>
+                <div>
+                    <div v-for="item in previewList" :key="item.title" class="preview-nav">
+                        <b>{{ item.title }}:</b>
+                        <template v-if="item.is_img">
+                            <img v-for="item2 in item.list" :key="item2.cid" :src="item2.img" alt="."
+                                class="preview-img" />
+                        </template>
+                        <template v-else>
+                            <van-button size="small" v-for="btn in item.list" plain :key="btn.cid" round
+                                style="margin:5px" color="#30abb3">{{
+                                        btn.title
+                                }}</van-button>
+                        </template>
+                    </div>
+                </div>
+                <van-button round type="default" @click="showPreview = false" class="cencelpreview"
+                    color="#30abb3">取消预览病症</van-button>
+            </van-popup>
         </div>
     </van-config-provider>
 
 </template>
 
 <script>
-import { getIlnessList, getUserPet } from "@/api/xiaomengshu"
+import { getIlnessList, getUserPet, getpreviewList } from "@/api/xiaomengshu"
 import DetailList from '../../../../components/xiaomengshu/Illness/DetailList.vue';
 import IndexBar from "../../../../components/xiaomengshu/Illness/IndexBar.vue"
+import { showFailToast } from 'vant'
 export default {
     components: { DetailList, IndexBar },
     data() {
@@ -108,7 +134,11 @@ export default {
             },
             isFirst: true,
             againDetail: [],
-            againDetailNum: -1,
+            againDetailNum: -2,
+            showPreview: false,
+            previewList: [],
+            getAll: 0,
+            cidList: []
         }
     },
     provide() {
@@ -182,30 +212,42 @@ export default {
                 cid: this.choiceCid,
             });
             this.detailList = res.data;
+            this.getAll += 1;
 
         },
         changeCid(cid) {
             this.choiceCid = cid;
+            if (this.cidList.indexOf(cid) == -1)
+                this.cidList.push(cid);
             this.getDetailList();
         },
         //点击下一步
         async nextResult() {
-            this.detailList.push([])
+            this.getAll += 1;
             this.$nextTick(async () => {
                 console.log(111)
                 if (this.isFirst || this.againDetailNum == -1) {
                     let res = await getIlnessList({
                         do: "result",
-                        ids: String(this.ids),
-                        no_ids: String(this.no_ids),
-                        cid: this.choiceCid
+                        ids: String([...this.formIds, ...this.ids]),
+                        no_ids: String([...this.formNo_ids, ...this.no_ids]),
+                        cid: String(this.cidList),
+                        age: this.ageString,
+                        pt_type: this.pet_type.id,
                     });
-                    if (this.isFirst) {
-                        this.againDetail = res.data.symptom_list
-                        this.againDetailNum = res.data.is_result - 1;
-                        this.isFirst = false;
+                    if (res.data.is_result <= 1) {
+                        this.$store.state.illnessresultList = res.data.result_list;
+                        this.$router.push({
+                            name: 'illnesspage',
+                            query: {
+                                type: res.data.is_result,
+                            }
+                        })
                     }
-                    if (this.againDetailNum != -1) {
+                    else if (this.isFirst) {
+                        this.againDetail = res.data.symptom_list
+                        this.againDetailNum = res.data.symptom_list.length - 1;
+                        this.isFirst = false;
                         this.detailList = this.againDetail[this.againDetailNum].combination;
                         this.againDetailNum--;
                     }
@@ -233,6 +275,21 @@ export default {
         chageRadio(index, type, list) {
             this.formIds[index] = list[type].cid;
             this.formNo_ids[index] = list[type ^ 1].cid;
+        },
+        Preview() {
+            if (this.cidList.length == 0) {
+                showFailToast('请选择症状');
+                return;
+            }
+            this.getAll += 1;
+            this.$nextTick(async () => {
+                let res = await getpreviewList({
+                    do: "CheckList",
+                    ids: String(this.ids)
+                });
+                this.previewList = res.data;
+                this.showPreview = true;
+            })
         }
     }
 
@@ -333,7 +390,24 @@ export default {
 
 }
 
-.ageClass {}
-</style>
+.preview-nav {
+    text-align: left;
+    margin: 10px 0;
+}
 
-2170
+.preview-img {
+    vertical-align: top;
+    margin: 5px;
+    width: 6rem;
+    height: 6rem;
+    background-size: cover;
+    border-radius: 10px;
+}
+
+.cencelpreview {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+</style>

@@ -108,6 +108,11 @@ const routes = [
         name: "illnessfrom",
         component: () => import("../views/xiaomengshu/ToolView/Illness/IllnessForm.vue"),
       },
+      {
+        path: "illnesspage",
+        name: "illnesspage",
+        component: () => import("../views/xiaomengshu/ToolView/Illness/IllnessPage.vue"),
+      },
     ],
     redirect: {
       name: "illnessmain",

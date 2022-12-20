@@ -124,7 +124,8 @@ export default {
             this.$router.push({
                 name: 'illnessfrom',
                 query: {
-                    cids: String(this.checked)
+                    cids: String(this.checked),
+                    pet_typeid: this.pet_typeid
                 }
             })
         },

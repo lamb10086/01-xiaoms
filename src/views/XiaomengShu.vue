@@ -7,14 +7,8 @@
         <img :src="choiceAnimal.url" alt="" />
         <span>{{ choiceAnimal.name }}站</span>
       </div>
-      <van-search
-        v-model="searchValue"
-        placeholder="枫趣"
-        shape="round"
-        left-icon=""
-        right-icon="search"
-        class="top-search"
-      >
+      <van-search v-model="searchValue" placeholder="枫趣" shape="round" left-icon="" right-icon="search"
+        class="top-search">
       </van-search>
       <span><van-icon name="chat-o" size="6vw" /></span>
     </nav>
@@ -41,21 +35,12 @@
   <!-- 初始不显示的页面 -->
   <van-popup v-model:show="show" position="top" round>
     <van-list class="changeainmal">
-      <van-cell
-        v-for="item in 2"
-        :key="item"
-        :border="false"
-        @click="changed(item)"
-      >
-        <img
-          :src="$store.state.animalUrl[item - 1]"
-          alt=""
-          :class="
-            $store.state.animalUrl[item - 1] == choiceAnimal.url
-              ? 'pitchOn-animal'
-              : ''
-          "
-        />
+      <van-cell v-for="item in 2" :key="item" :border="false" @click="changed(item)">
+        <img :src="$store.state.animalUrl[item - 1]" alt="" :class="
+          $store.state.animalUrl[item - 1] == choiceAnimal.url
+            ? 'pitchOn-animal'
+            : ''
+        " />
         <span>{{ $store.state.animalName[item - 1] }}站</span>
       </van-cell>
     </van-list>
@@ -121,11 +106,13 @@ export default {
   .top-search {
     flex-grow: 1;
   }
+
   .choice-animal {
     // flex-grow: 1;
     height: 13vw;
     line-height: 13vw;
     text-align: center;
+
     img {
       border-radius: 50%;
       vertical-align: middle; //解决图片和文字同行居中
@@ -135,11 +122,13 @@ export default {
     }
   }
 }
+
 .changeainmal {
-  .van-cell__value {
-    height: 20vw;
-    line-height: 20vw;
-    text-align: center;
+  text-align: center;
+
+  ::v-deep .van-cell__value {
+    text-align: left !important;
+
     img {
       border-radius: 50%;
       vertical-align: top; //解决图片和文字同行居中
@@ -149,6 +138,7 @@ export default {
     }
   }
 }
+
 .btn1 {
   width: 100%;
   border: 1px solid #e7e7e7;
@@ -157,6 +147,7 @@ export default {
   text-align: center;
   vertical-align: auto;
 }
+
 .loginbac {
   width: 100vw;
   height: 70vw;
@@ -165,8 +156,10 @@ export default {
   vertical-align: middle;
   display: table-cell;
 }
+
 .middle-nav {
   margin-top: -10vw;
+
   div {
     background-color: white;
     border-radius: 20px;
@@ -174,6 +167,7 @@ export default {
     width: 95vw;
   }
 }
+
 .pitchOn-animal {
   border: 3px solid #74be5f;
 }
