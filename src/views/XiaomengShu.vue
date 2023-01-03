@@ -37,10 +37,10 @@
     <van-list class="changeainmal">
       <van-cell v-for="item in 2" :key="item" :border="false" @click="changed(item)">
         <img :src="$store.state.animalUrl[item - 1]" alt="" :class="
-          $store.state.animalUrl[item - 1] == choiceAnimal.url
-            ? 'pitchOn-animal'
-            : ''
-        " />
+  $store.state.animalUrl[item - 1] == choiceAnimal.url
+    ? 'pitchOn-animal'
+    : ''
+" />
         <span>{{ $store.state.animalName[item - 1] }}站</span>
       </van-cell>
     </van-list>
@@ -151,6 +151,7 @@ export default {
 .loginbac {
   width: 100vw;
   height: 70vw;
+  background-size: cover;
   background-image: url("https://static.epetbar.com/epet_wap_img/opgc/version_v2/default_bg.png");
   text-align: center;
   vertical-align: middle;

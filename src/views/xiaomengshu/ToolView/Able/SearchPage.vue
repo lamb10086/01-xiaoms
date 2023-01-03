@@ -2,23 +2,12 @@
   <div>
     <div class="search-nav">
       <van-icon name="arrow-left" size="2rem" @click="onClickLeft()" />
-      <van-search
-        v-model="searchValue"
-        show-action
-        placeholder="请输入搜索关键词"
-        @update:model-value="onSearch()"
-        @cancel="onClickLeft()"
-        shape="round"
-      />
+      <van-search v-model="searchValue" show-action placeholder="请输入搜索关键词" @update:model-value="onSearch()"
+        @cancel="onClickLeft()" shape="round" />
     </div>
     <div v-show="!searchFocus">
       <van-cell-group>
-        <van-cell
-          v-for="item in searchList"
-          :title="item.title"
-          :key="item.cid"
-          @click="toPage1()"
-        />
+        <van-cell v-for="item in searchList" :title="item.title" :key="item.cid" @click="toPage1()" />
       </van-cell-group>
     </div>
     <div v-show="searchFocus">
@@ -32,7 +21,7 @@
         </div>
       </div>
       <div class="record-list">
-        <div v-for="item in recordList" :key="item">{{ item }}</div>
+        <div v-for="item in recordList" :key="item" @click="toRecord(item)">{{ item }}</div>
       </div>
     </div>
   </div>
@@ -76,6 +65,10 @@ export default {
       });
       this.searchList = res.data.list;
     },
+    toRecord(item) {
+      this.searchValue = item;
+      this.onSearch();
+    },
     toPage1() {
       if (this.recordList.indexOf(this.searchValue) == -1)
         this.recordList.push(this.searchValue);
@@ -100,23 +93,29 @@ export default {
   align-items: center;
   display: flex;
   justify-content: space-around;
+
   .van-search {
     flex: 1;
   }
+
   border-bottom: 1px solid #eeeeee;
 }
+
 .record {
   align-items: center;
   display: flex;
   justify-content: space-between;
   padding: 3vw 3vw;
   height: 8vw;
+
   span {
     font-size: 1.3rem;
   }
 }
+
 .record-list {
   display: flex;
+
   div {
     margin: 2vw 1vw;
     padding: 1vw 5vw;
