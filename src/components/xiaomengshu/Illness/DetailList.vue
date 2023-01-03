@@ -10,21 +10,21 @@
                             :class="{ choicebtn: this.allids[index] && (this.allids[index].indexOf(btn.cid) != -1 || this.ids.indexOf(btn.cid) != -1) }"
                             v-for="btn in item.list" :key="btn.cid" round type="default"
                             @click.prevent="changeCid(btn.cid, index, 0)">{{ btn.title
-                            }}</van-button>
+}}</van-button>
                     </template>
                     <template v-if="item.checkbox === 1">
                         <van-button size="small"
                             :class="{ choicebtn: this.allids[index] && (this.allids[index].indexOf(btn.cid) != -1 || this.ids.indexOf(btn.cid) != -1) }"
                             v-for="btn in item.list" :key="btn.cid" round type="default"
                             @click.prevent="changeCid(btn.cid, index, 1)">{{ btn.title
-                            }}</van-button>
+}}</van-button>
                     </template>
                 </div>
                 <div v-else class="img-bar">
                     <template v-if="item.checkbox === 0">
                         <div class="img-btn" v-for="btn in item.list" :key="btn.cid" :style="{
-                            backgroundImage: `url(${btn.img})`
-                        }" @click="changeImgCid(btn, index, 2)">
+    backgroundImage: `url(${btn.img})`
+}" @click="changeImgCid(btn, index, 2)">
                             <div v-if="imgClass(btn.cid, index)" class="img-btn-shade">
                                 <van-icon name="checked" size="2rem" color="#30abb3" />
                             </div>
@@ -32,8 +32,8 @@
                     </template>
                     <template v-if="item.checkbox === 1">
                         <div class="img-btn" v-for="btn in item.list" :key="btn.cid" :style="{
-                            backgroundImage: `url(${btn.img})`
-                        }" @click="changeImgCid(btn, index, 3)">
+    backgroundImage: `url(${btn.img})`
+}" @click="changeImgCid(btn, index, 3)">
                             <div v-if="imgClass(btn.cid, index)" class="img-btn-shade">
                                 <van-icon name="checked" size="2rem" color="#30abb3" />
                             </div>
@@ -108,8 +108,7 @@ export default {
             }
         },
         imgClass(cid, index) {
-            console.log("imgClass", cid, index)
-            console.log("this.detailList", this.detailList)
+
             if ((this.allids[index].indexOf(cid) != -1 || this.ids.indexOf(cid) != -1))
                 return true
             else
@@ -127,8 +126,8 @@ export default {
     },
     watch: {
         getAll() {
-            console.log(this.detailList)
-            console.log("watch")
+            // console.log(this.detailList)
+            // console.log("watch")
             if (!this.detailList)
                 return
             for (let i = 0; i < this.allids.length; i++) {
@@ -166,7 +165,7 @@ export default {
 
     .detail-btn {
         button {
-            margin: 0 5px;
+            margin: 3px 5px;
         }
 
         .img-bar {
@@ -217,6 +216,7 @@ export default {
         border-radius: 20px;
         padding: 1rem 5px;
         font-size: 1rem;
+
     }
 
     .choicebtn {

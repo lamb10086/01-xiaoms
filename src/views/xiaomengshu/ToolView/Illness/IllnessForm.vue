@@ -9,7 +9,7 @@
             </div>
             <div class="main-form" v-show="isFirst">
 
-                <van-form @submit="onSubmit" label-width="6rem" input-align="right">
+                <van-form label-width="6rem" input-align="right">
                     <van-cell-group inset>
                         <h3>请填写基本信息</h3>
                         <van-field v-if="this.$route.query.pet_typeid == 0" @click="choicePet_type" readonly
@@ -22,10 +22,10 @@
                                             icon-size="1.5rem">
                                             <van-radio :name="item.list[0].cid"
                                                 @click="chageRadio(index, 0, item.list)">{{ item.list[0].title
-                                                }}</van-radio>
+}}</van-radio>
                                             <van-radio :name="item.list[1].cid"
                                                 @click="chageRadio(index, 1, item.list)">{{ item.list[1].title
-                                                }}</van-radio>
+}}</van-radio>
                                         </van-radio-group>
                                     </div>
                                 </template>
@@ -41,8 +41,8 @@
                 <div class="symptom-btn">
                     <van-button :class="{ choicebtn: item.cid === choiceCid }" v-for="item in symptom" :key="item.cid"
                         round type="default" @click.prevent="changeCid(item.cid)">{{
-                                item.title
-                        }}</van-button>
+        item.title
+}}</van-button>
                 </div>
             </div>
             <detail-list :cid="choiceCid" :detailList="detailList" :getAll="getAll"></detail-list>
@@ -88,8 +88,8 @@
                         <template v-else>
                             <van-button size="small" v-for="btn in item.list" plain :key="btn.cid" round
                                 style="margin:5px" color="#30abb3">{{
-                                        btn.title
-                                }}</van-button>
+        btn.title
+}}</van-button>
                         </template>
                     </div>
                 </div>
@@ -156,8 +156,8 @@ export default {
             this.dateMap.set(item.cid, item.title);
         })
         const { cids: cidArray } = this.$route.query;
-
-        this.cidArray = cidArray.split(",");
+        if (typeof cidArray == "string")
+            this.cidArray = cidArray.split(",");
         await this.getFormList();
         await this.getSySmptomList();
         this.ageTime = [];
@@ -192,10 +192,10 @@ export default {
                 cids: String(this.cidArray),
             });
             this.formList = res.data;
-            console.log(this.formList)
+            // console.log(this.formList)
         },
         outpet_type() {
-            console.log(this.pet_type)
+            // console.log(this.pet_type)
         },
         //获取症状列表
         async getSySmptomList() {
@@ -225,7 +225,7 @@ export default {
         async nextResult() {
             this.getAll += 1;
             this.$nextTick(async () => {
-                console.log(111)
+                // console.log(111)
                 if (this.isFirst || this.againDetailNum == -1) {
                     let res = await getIlnessList({
                         do: "result",

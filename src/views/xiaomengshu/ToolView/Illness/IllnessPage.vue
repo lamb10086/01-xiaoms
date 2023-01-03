@@ -18,17 +18,18 @@
             </p>
         </div>
         <div class="have_result" v-else>
-            <div v-for="(item, index) in resultList" :key="item.scene_id">
-                <van-button color="#37aeb6" plain class="top-btn" round @click.prevent="btnId = index;">{{ item.name
-                }}</van-button>
-                <div class="point" v-show="index == btnId"></div>
+            <div>
+                <van-button v-for="(item, index) in resultList" :key="item.scene_id" color="#37aeb6" plain
+                    class="top-btn" round @click="chnageId($event, index)">{{ item.name }}</van-button>
+                <div class="point"></div>
                 <hr>
             </div>
+
             <div class="introduce">
 
                 <h2><img src="https://static.epetbar.com/epet_wap_img/tools/h_biaot.png" alt="">{{
-                        resultList[btnId].name
-                }}</h2>
+        resultList[btnId].name
+}}</h2>
                 <p>
                     <b>疾病介绍：</b>{{ resultList[btnId].desc }}
                 </p>
@@ -50,11 +51,12 @@ export default {
             topUrl: "https://static.epetbar.com/epet_wap_img/tools/h_head.png",
             topUrl2: "https://static.epetbar.com/epet_wap_img/tools/h_result.png",
             btnId: 0,
+            btnLeft: "40px",
         }
     },
     computed: {
         resultType() {
-            console.log(this.$route.query.type)
+            // console.log(this.$route.query.type)
             return this.$route.query.type
         },
         resultList() {
@@ -66,6 +68,10 @@ export default {
             this.$router.push({
                 name: 'illness'
             })
+        },
+        chnageId(event, index) {
+            this.btnId = index;
+            this.btnLeft = event.target.offsetLeft + 20 + 'px'
         }
     }
 }
@@ -102,12 +108,14 @@ export default {
 
     padding: 15px;
 
-    .top-btn {}
+    .top-btn {
+        margin: 0 5px;
+    }
 
     .point {
         position: relative;
         top: 11px;
-        left: 40px;
+        left: v-bind(btnLeft);
         transform: rotateZ(45deg);
         width: 10px;
         height: 10px;
