@@ -1,11 +1,7 @@
 <template>
   <div>
     <van-config-provider :theme-vars="themeVars">
-      <van-nav-bar
-        left-arrow
-        @click-left="onClickLeft"
-        @click-right="showgrid = !showgrid"
-      >
+      <van-nav-bar left-arrow @click-left="onClickLeft" @click-right="showgrid = !showgrid">
         <template #title>
           <div class="top-nav-title">{{ Toptitle }}</div>
         </template>
@@ -13,13 +9,9 @@
           <van-icon name="wap-nav" size="5vw" />
         </template>
       </van-nav-bar>
-      <van-grid v-if="showgrid" :border="false" icon-size="2.2rem">
-        <van-grid-item
-          :icon="gridImg[0]"
-          text="首页"
-          :to="{ name: 'choiceness' }"
-        />
-        <van-grid-item
+      <van-grid v-if="showgrid" :border="false" icon-size="2.2rem" :column-num="1">
+        <van-grid-item :icon="gridImg[0]" text="返回首页" :to="{ name: 'choiceness' }" />
+        <!-- <van-grid-item
           :icon="gridImg[1]"
           text="商品分类"
           :to="{ name: 'classify' }"
@@ -33,7 +25,7 @@
           :icon="gridImg[3]"
           text="我的E宠"
           :to="{ name: 'myselfe' }"
-        />
+        /> -->
       </van-grid>
     </van-config-provider>
   </div>
@@ -85,9 +77,11 @@ export default {
   white-space: nowrap;
   font-weight: 600;
 }
+
 .van-nav-bar {
   height: 4rem;
   line-height: 4rem;
+
   .van-nav-bar__content {
     height: 4rem !important;
     line-height: 4rem;

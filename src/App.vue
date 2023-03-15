@@ -1,6 +1,6 @@
 <template>
   <router-view />
-  <van-tabbar v-model="active" v-show="isActiveShow">
+  <!-- <van-tabbar v-model="active" v-show="isActiveShow">
     <router-link :to="{ name: 'choiceness' }">
       <div class="main-bottom" v-show="choiceView != 'choiceness'"></div>
       <div
@@ -45,7 +45,7 @@
         :style="choice"
       ></div>
     </router-link>
-  </van-tabbar>
+  </van-tabbar> -->
 </template>
 <script>
 export default {
@@ -83,62 +83,75 @@ export default {
   padding: 0 3vw;
   background-clip: content-box;
 }
+
 .van-tabbar {
   display: flex;
   justify-content: space-around;
   --van-tabbar-height: 13vw;
-  :nth-child(2) > div {
+
+  :nth-child(2)>div {
     background-position: -13vw 0vw;
   }
-  :nth-child(3) > div {
+
+  :nth-child(3)>div {
     background-position: -50vw 0;
   }
-  :nth-child(4) > div {
+
+  :nth-child(4)>div {
     background-position: -30vw 0;
   }
-  :nth-child(5) > div {
+
+  :nth-child(5)>div {
     background-position: -72vw 0;
   }
 }
+
 :root {
   --van-nav-bar-icon-color: black;
 }
+
 html {
   font-size: 10px;
 }
+
 @media screen and (min-width: 321px) and (max-width: 375px) {
   html {
     font-size: 11px;
   }
 }
+
 @media screen and (min-width: 376px) and (max-width: 414px) {
   html {
     font-size: 12px;
   }
 }
+
 @media screen and (min-width: 415px) and (max-width: 639px) {
   html {
     font-size: 15px;
   }
 }
+
 @media screen and (min-width: 640px) and (max-width: 719px) {
   html {
     font-size: 20px;
   }
 }
+
 @media screen and (min-width: 720px) and (max-width: 749px) {
   html {
     font-size: 22.5px;
   }
 }
+
 @media screen and (min-width: 750px) and (max-width: 799px) {
   html {
     font-size: 23.5px;
   }
 }
+
 @media screen and (min-width: 800px) {
   html {
     font-size: 25px;
   }
-}
-</style>
+}</style>

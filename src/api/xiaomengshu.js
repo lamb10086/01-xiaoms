@@ -1,6 +1,6 @@
 import xiaoms from "@/util/http";
 export const getList = (pet_type) => {
-  return xiaoms.get(`/v3/content/opgc/IndexV3.html?do=GetListNew&pet_type=${pet_type}`);
+  return xiaoms.get(`/toDayKnowLedge?pet_type=${pet_type}`);
 };
 export const getRecommendList = (params) => {
   return xiaoms.get(
