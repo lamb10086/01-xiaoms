@@ -118,6 +118,11 @@ const routes = [
       name: "illnessmain",
     },
   },
+  {
+    path: "/wormermain",
+    name: "wormermain",
+    component: () => import("../views/xiaomengshu/ToolView/Wormer/WormerMain.vue"),
+  },
 ];
 
 const router = createRouter({
