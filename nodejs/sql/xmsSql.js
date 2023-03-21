@@ -1,10 +1,15 @@
 const db = require("./db.js");
+const fs = require("fs");
+const sqlName = require("../api/sqlName");
 let connection = db();
-connection.connect((err) => {
-  if (err) return console.log("链接数据库错误：", err);
-  console.log("链接数据库成功");
-  success();
-});
+function connectFirst() {
+  connection.connect((err) => {
+    if (err) return console.log("链接数据库错误：", err);
+    console.log("链接数据库成功");
+    success();
+  });
+}
+//连接成功创建表
 function success() {
   connection.query(
     `
@@ -27,10 +32,38 @@ function success() {
       }
     }
   );
+
+  //插入数据库
+  // fs.readFile("../xmsJs/test.txt", "utf-8", (err, data) => {
+  //   if (err) {
+  //     console.log("读取失败", err);
+  //   } else {
+  //     data = data.split("\n");
+  //     console.log("读取成功");
+  //     for (let i = 0; i < data.length; i++) {
+  //       insertToDayKnowLedge(data[i]);
+  //     }
+  //   }
+  // });
 }
-process.on("message", (data) => {
-  window[data.type]();
-});
-function toDayKnowLedge() {
-  connection.query(``);
+//
+
+//插入
+function insertToDayKnowLedge(data) {
+  connection.query(
+    `
+    INSERT INTO  KnowLedgeList(toDayKnowLedge) VALUES(?)`,
+    [data],
+    (err, result) => {
+      if (err) {
+        console.log("插入失败", err);
+      } else {
+        console.log("插入成功", result);
+      }
+    }
+  );
 }
+function toDayKnowLedge() {}
+module.exports = {
+  connectFirst,
+};
