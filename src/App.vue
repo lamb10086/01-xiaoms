@@ -1,7 +1,7 @@
 <template>
   <router-view />
-  <!-- <van-tabbar v-model="active" v-show="isActiveShow">
-    <router-link :to="{ name: 'choiceness' }">
+  <van-tabbar v-model="active" v-show="isActiveShow">
+    <!--<router-link :to="{ name: 'choiceness' }">
       <div class="main-bottom" v-show="choiceView != 'choiceness'"></div>
       <div
         class="main-bottom"
@@ -35,17 +35,13 @@
         v-show="choiceView == 'cart'"
         :style="choice"
       ></div>
-    </router-link>
+    </router-link>-->
 
     <router-link :to="{ name: 'myselfe' }">
       <div class="main-bottom" v-show="choiceView != 'myselfe'"></div>
-      <div
-        class="main-bottom"
-        v-show="choiceView == 'myselfe'"
-        :style="choice"
-      ></div>
+      <div class="main-bottom" v-show="choiceView == 'myselfe'" :style="choice"></div>
     </router-link>
-  </van-tabbar> -->
+  </van-tabbar>
 </template>
 <script>
 export default {
@@ -154,4 +150,5 @@ html {
   html {
     font-size: 25px;
   }
-}</style>
+}
+</style>

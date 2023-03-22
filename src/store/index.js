@@ -9,8 +9,7 @@ export default createStore({
       "https://img2.epetbar.com/2020-08/17/15/b0fda150a9dcee0339e1e9c36220febc.png",
     ],
     user: {
-      headUrl:
-        "https://static.epetbar.com/epet_wap_img/opgc/zms_avatar_cat.png",
+      headUrl: require("../../public/pictrue/headUrl.png"),
     },
     eaticonName: ["clear", "warning", "checked"],
     eaticonColor: ["#ff3a3f", "#fda300", "#73c800"],

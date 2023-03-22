@@ -6,11 +6,10 @@
         <span><b>养宠小工具</b> </span>
       </template>
     </van-nav-bar>
-    <van-grid :column-num="4" :border="false" icon-size="14vw" :clickable="true">
+    <van-grid :column-num="3" :border="false" icon-size="20vw" :clickable="true">
       <van-grid-item :icon="pictureUrl + '9.png'" :to="{ name: 'eat' }" />
       <van-grid-item :icon="pictureUrl + '8.png'" :to="{ name: 'able' }" />
       <van-grid-item :icon="pictureUrl + '7.png'" :to="{ name: 'illness' }" />
-      <van-grid-item :icon="pictureUrl + '6.png'" :to="{ name: 'eat' }" />
     </van-grid>
 
     <a href=""><img
