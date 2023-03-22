@@ -1,11 +1,15 @@
 const db = require("./db.js");
+const fs = require("fs");
+const sqlName = require("../api/sqlName");
 let connection = db();
-connection.connect((err) => {
-  if (err) return console.log("链接数据库错误：", err);
-  console.log("链接数据库成功");
-  success();
-});
-//成功后创建表
+function connectFirst() {
+  connection.connect((err) => {
+    if (err) return console.log("链接数据库错误：", err);
+    console.log("链接数据库成功");
+    success();
+  });
+}
+//连接成功创建表
 function success() {
   connection.query(
     `
@@ -28,18 +32,38 @@ function success() {
       }
     }
   );
-}
-process.on("message", (data) => {
-  window[data.type]();
-});
-function toDayKnowLedge() {
-  connection.query(``);
-}
 
-setInterval(() => {
-  let text = document.querySelector(".today-con.ft12.mt10");
-  let ls=document.querySelector(".c333.ft12.ml5")
-  ls.click();
-  fetch("")
-  console.log(String(text.innerText));
-}, 500);
+  //插入数据库
+  // fs.readFile("../xmsJs/test.txt", "utf-8", (err, data) => {
+  //   if (err) {
+  //     console.log("读取失败", err);
+  //   } else {
+  //     data = data.split("\n");
+  //     console.log("读取成功");
+  //     for (let i = 0; i < data.length; i++) {
+  //       insertToDayKnowLedge(data[i]);
+  //     }
+  //   }
+  // });
+}
+//
+
+//插入
+function insertToDayKnowLedge(data) {
+  connection.query(
+    `
+    INSERT INTO  KnowLedgeList(toDayKnowLedge) VALUES(?)`,
+    [data],
+    (err, result) => {
+      if (err) {
+        console.log("插入失败", err);
+      } else {
+        console.log("插入成功", result);
+      }
+    }
+  );
+}
+function toDayKnowLedge() {}
+module.exports = {
+  connectFirst,
+};

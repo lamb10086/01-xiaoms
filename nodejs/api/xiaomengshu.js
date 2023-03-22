@@ -2,10 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const { fork } = require("child_process");
-// const sqlName = require("./sqlName");
+const sqlName = require("./sqlName");
 app.use(cors());
 app.use(express.json());
-// sqlDb = fork("../sql/xmsSql.js");
+sqlDb = fork("../sql/xmsSql.js");
 app.all("*", function (req, res, next) {
   console.log("此路是我开");
   //后端设置跨域请求头  *代表所有 不安全 谁都可以访问公司后台
@@ -23,12 +23,13 @@ app.all("*", function (req, res, next) {
   //放行
   next();
 });
+
 app.get("/toDayKnowLedge", (req, res) => {
   if (req.query.pet_type == "dog" || req.query.pet_type == "cat") {
-    console.log("first");
+    let data = sqlAll[sqlName.QUERY_TODAYKNOWLEDGE]();
     res.json({
       data: {
-        everyday_tips: "狗狗s",
+        everyday_tips: data,
       },
     });
   }
