@@ -5,6 +5,7 @@ connection.connect((err) => {
   console.log("链接数据库成功");
   success();
 });
+//成功后创建表
 function success() {
   connection.query(
     `
@@ -34,3 +35,11 @@ process.on("message", (data) => {
 function toDayKnowLedge() {
   connection.query(``);
 }
+
+setInterval(() => {
+  let text = document.querySelector(".today-con.ft12.mt10");
+  let ls=document.querySelector(".c333.ft12.ml5")
+  ls.click();
+  fetch("")
+  console.log(String(text.innerText));
+}, 500);

@@ -2,10 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const { fork } = require("child_process");
-const sqlName = require("./sqlName");
+// const sqlName = require("./sqlName");
 app.use(cors());
 app.use(express.json());
-sqlDb = fork("../sql/xmsSql.js");
+// sqlDb = fork("../sql/xmsSql.js");
 app.all("*", function (req, res, next) {
   console.log("此路是我开");
   //后端设置跨域请求头  *代表所有 不安全 谁都可以访问公司后台
@@ -14,7 +14,7 @@ app.all("*", function (req, res, next) {
   // res.setHeader("Access-Control-Allow-Origin",["http://127.0.0.1:5500"]);
 
   //...Headers必须的固定值,"content-type"
-  res.setHeader("Access-Control-Allow-Headers", "X-request-With,content-type");
+  res.setHeader("Access-Control-Allow-Headers", "*");
   // res.setHeader("Access-Control-Allow-Headers","X-request-With");
 
   //允许跨域的  请求方式
