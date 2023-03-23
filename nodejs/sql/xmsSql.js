@@ -7,6 +7,7 @@ function connectFirst() {
     if (err) return console.log("链接数据库错误：", err);
     console.log("链接数据库成功");
     success();
+    initToDayKnowLedge();
   });
 }
 //连接成功创建表
@@ -67,3 +68,54 @@ function toDayKnowLedge() {}
 module.exports = {
   connectFirst,
 };
+//初始化表
+function initToDayKnowLedge() {
+  let ls;
+  connection.query("SELECT COUNT(*) FROM KnowLedgeList;", (err, data) => {
+    if (err) {
+      console.log("初始化查询失败", err);
+    } else {
+      console.log("初始化查询成功", data);
+      ls = data;
+    }
+  });
+  if (ls != 0) return;
+  connection.query(
+    "LOAD DATA LOCAL INFILE 'C:/Users/yangp/Desktop/test.txt' INTO TABLE KnowLedgeList;",
+    (err, data) => {
+      if (err) {
+        console.log("导入失败", err);
+      } else {
+        console.log("导入成功", data);
+      }
+    }
+  );
+}
+
+function queryToDayKnowLedge(res) {
+  try {
+    connection.query("select * from KnowLedgeList order by rand() limit 1;", (err, data) => {
+      if (err) {
+        console.log("查询KnowLedgeList失败", err);
+      } else {
+        console.log("查询KnowLedgeList成功", data);
+        res.json({
+          data: {
+            data: data[0],
+          },
+        });
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+process.on("message", (data) => {
+  if (data.type === "successMove") {
+    connectFirst();
+  }
+  if (data.type === "queryToDayKnowLedge") {
+    queryToDayKnowLedge(res);
+    console.log("data", data);
+  }
+});

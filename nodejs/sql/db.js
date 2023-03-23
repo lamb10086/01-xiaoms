@@ -7,5 +7,6 @@ module.exports = (database = "test") => {
     user: "root", //用户名
     password: "root", //密码
     database, //数据库
+    flags: "LOCAL_FILES",
   });
 };

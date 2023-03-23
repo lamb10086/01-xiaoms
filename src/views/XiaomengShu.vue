@@ -12,7 +12,9 @@
 
       <!-- </van-search> -->
       <span style="font-size:1.6rem">小萌书</span>
-      <span><van-icon name="chat-o" size="6vw" /></span>
+      <span>
+        <!-- <van-icon name="chat-o" size="6vw" /> -->
+      </span>
     </nav>
     <!-- 头像显示 -->
     <div class="loginbac">

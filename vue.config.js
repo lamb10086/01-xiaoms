@@ -12,6 +12,14 @@ module.exports = defineConfig({
           "^/xiaoms": "",
         },
       },
+      "/local": {
+        target: "http://192.168.190.97:8081",
+        ws: true,
+        ChangeOrigin: true,
+        pathRewrite: {
+          "^/local": "",
+        },
+      },
     },
   },
 });

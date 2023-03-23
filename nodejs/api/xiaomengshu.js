@@ -23,18 +23,17 @@ app.all("*", function (req, res, next) {
   //放行
   next();
 });
-
-app.get("/toDayKnowLedge", (req, res) => {
+app.get("/toDayKnowLedge", async (req, res) => {
+  console.log("接收到");
+  resAll = res;
   if (req.query.pet_type == "dog" || req.query.pet_type == "cat") {
-    let data = sqlAll[sqlName.QUERY_TODAYKNOWLEDGE]();
-    res.json({
-      data: {
-        everyday_tips: data,
-      },
-    });
+    let ls;
+    sqlDb.send({ type: "queryToDayKnowLedge", res: res });
+    console.log("finish");
   }
-  console.log("收到请求知识模块", req.query.pet_type);
+  return;
 });
 app.listen(8081, () => {
-  console.log("服务器启动");
+  sqlDb.send({ type: "successMove" });
+  console.log("服务器8081启动");
 });
