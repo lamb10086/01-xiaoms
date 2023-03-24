@@ -11,38 +11,66 @@
 <body>
     <script>
         let mp = new Map();
+        let mp1 = new Map();
         let ls = 0, sum = 0;
-        function find(index) {
-            fetch(`/appp/v3/content/Tools/Eat.html?cid=${index}&&type=1`, {
-                headers: { "content-type": "application/x-www-form-urlencoded" },
-            }).then(res => res.json()).then(() => {
-                for (let i = 0; i < res.data.rightCate.length; i++) {
-                    mp.set(res.data.rightCate[i].)
-                }
-            }
+        let lsList = ["禁吃", "慎吃", "可吃"]
+        let dataAll;
+        let s = [4587, 4603, 4612, 4622, 4622, 4635, 4640, 4671, 4689, 4713, 4726, 4751, 4770, 4846, 4882, 15048];
 
-            )
+        async function find(index) {
+            await fetch(`/appp/v3/content/Tools/Eat.html`, {
+                method: "post",
+                body: `cid=${index}&&etype=1`,
+                headers: { "content-type": "application/x-www-form-urlencoded" },
+            }).then(res => res.json()).then((res) => {
+                // console.log("ls", res)
+                for (let i = 0; i < res.data.rightCate.length; i++) {
+                    for (let j = 0; j < res.data.rightCate[i].child.length; j++) {
+                        mp.set(res.data.rightCate[i].child[j].cid, index)
+                    }
+
+                }
+                console.log(index)
+                if (index <= 3)
+                    find(index + 1)
+                else {
+                    for (let i = 0; i < s.length; i++) {
+                        doSome(s[i]);
+                    }
+                }
+            })
         }
-        if (ls == 0)
-            doSome()
-        function doSome() {
-            if (sum >= 1) return;
-            ls = 1;
+        find(1);
+
+
+        console.log(mp)
+        function doSome(index) {
             sum++;
             fetch("/appp/v3/content/Tools/Eat.html", {
+                method: "post",
+                body: `cid=${index}&&etype=2`,
                 headers: { "content-type": "application/x-www-form-urlencoded" },
             }).then(res => res.json()).then(
                 async res => {
-                    console.log(sum + ":  " + JSON.stringify(res.data));
+                    // console.log(sum + ":  " + JSON.stringify(res.data));
+                    for (let i = 0; i < res.data.rightCate.length; i++) {
+                        for (let j = 0; j < res.data.rightCate[i].child.length; j++) {
+                            res.data.rightCate[i].child[j].fid = index;
+                            console.log(mp.get(parseInt(res.data.rightCate[i].child[j].cid)), res.data.rightCate[i].child[j].cid, lsList[mp.get(parseInt(res.data.rightCate[i].child[j].cid)) - 1])
+                            res.data.rightCate[i].child[j].specialType = lsList[mp.get(parseInt(res.data.rightCate[i].child[j].cid)) - 1];
+                        }
+                    }
+                    console.log("res", res.data.rightCate)
                     await fetch("/add", {
                         method: "post",
-                        body: JSON.stringify({ need: res.data.leftCate }),
+                        body: JSON.stringify({ need: res.data.rightCate }),
                         headers: {
                             "Content-Type": "application/json",
                         },
-                    }).then(() => doSome())
+                    })
                 })
-        }  
+        }
+
     </script>
 </body>
 

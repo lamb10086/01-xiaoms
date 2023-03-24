@@ -2,7 +2,7 @@ const fs = require("fs");
 
 const express = require("express");
 let app = express();
-app.use(express.static("./public2"));
+app.use(express.static("./public3"));
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
 //参数1：代理路径  自己定义的
@@ -20,25 +20,39 @@ app.use(
 );
 app.use(express.json());
 let ls = 0;
-let alldata;
+let alldata = [];
 app.use(express.urlencoded({ extended: true }));
 app.post("/add", (req, res) => {
   //   console.log(req.body);
-  alldata = req.body.need;
-  console.log("alldata", alldata);
-  //   ls++;
+  alldata = alldata.concat(req.body.need);
+  // console.log("alldata", alldata);
+  ls++;
   res.json({});
   //   console.log(ls);
-  //   if (ls == 100)
-  finish();
+  if (ls == 16) finish();
 });
+
 function finish() {
   let ls = "";
   for (let i = 0; i < alldata.length; i++) {
-    ls += alldata[i].cid + "\t" + alldata[i].title + "\t" + alldata[i].etype + "\n";
+    for (let j = 0; j < alldata[i].child.length; j++) {
+      ls +=
+        alldata[i].child[j].cid +
+        "\t" +
+        alldata[i].child[j].title +
+        "\t" +
+        "'" +
+        alldata[i].child[j].pic +
+        "'" +
+        "\t" +
+        alldata[i].child[j].fid +
+        "\t" +
+        alldata[i].child[j].specialType +
+        "\n";
+    }
   }
   fs.writeFile(
-    "test2.txt",
+    "test3.txt",
     ls,
     {
       encoding: "utf-8",
