@@ -92,30 +92,21 @@ function initToDayKnowLedge() {
   );
 }
 
-function queryToDayKnowLedge(res) {
+function queryToDayKnowLedge(callback) {
   try {
     connection.query("select * from KnowLedgeList order by rand() limit 1;", (err, data) => {
       if (err) {
         console.log("查询KnowLedgeList失败", err);
       } else {
         console.log("查询KnowLedgeList成功", data);
-        res.json({
-          data: {
-            data: data[0],
-          },
-        });
+        callback(data[0]);
       }
     });
   } catch (err) {
     console.log(err);
   }
 }
-process.on("message", (data) => {
-  if (data.type === "successMove") {
-    connectFirst();
-  }
-  if (data.type === "queryToDayKnowLedge") {
-    queryToDayKnowLedge(res);
-    console.log("data", data);
-  }
-});
+module.exports = {
+  connectFirst,
+  queryToDayKnowLedge,
+};

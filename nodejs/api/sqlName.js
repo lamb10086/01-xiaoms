@@ -1,4 +1,5 @@
 const sqlName = {
-  QUERY_TODAYKNOWLEDGE: "toDayKnowLedge",
+  QUERY_TODAYKNOWLEDGE: "queryToDayKnowLedge",
+  CONNECTFIRST: "connectFirst",
 };
 module.exports = sqlName;

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let mp = new Map();
+        let ls = 0, sum = 0;
+        function find(index) {
+            fetch(`/appp/v3/content/Tools/Eat.html?cid=${index}&&type=1`, {
+                headers: { "content-type": "application/x-www-form-urlencoded" },
+            }).then(res => res.json()).then(() => {
+                for (let i = 0; i < res.data.rightCate.length; i++) {
+                    mp.set(res.data.rightCate[i].)
+                }
+            }
+
+            )
+        }
+        if (ls == 0)
+            doSome()
+        function doSome() {
+            if (sum >= 1) return;
+            ls = 1;
+            sum++;
+            fetch("/appp/v3/content/Tools/Eat.html", {
+                headers: { "content-type": "application/x-www-form-urlencoded" },
+            }).then(res => res.json()).then(
+                async res => {
+                    console.log(sum + ":  " + JSON.stringify(res.data));
+                    await fetch("/add", {
+                        method: "post",
+                        body: JSON.stringify({ need: res.data.leftCate }),
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    }).then(() => doSome())
+                })
+        }  
+    </script>
+</body>
+
+</html>

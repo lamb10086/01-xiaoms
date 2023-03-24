@@ -13,7 +13,7 @@ module.exports = defineConfig({
         },
       },
       "/local": {
-        target: "http://192.168.190.97:8081",
+        target: "http://192.168.123.72:8081",
         ws: true,
         ChangeOrigin: true,
         pathRewrite: {

@@ -1,9 +1,8 @@
 import xiaoms from "@/util/http";
-// import local from "@/util/local";
+
+import local from "@/util/local";
 export const getList = async (pet_type) => {
-  let res = await fetch(`http://192.168.190.97:8081/toDayKnowLedge?pet_type=${pet_type}`).then((res) => res.json());
-  console.log("res", res);
-  return res;
+  return local.get(`/toDayKnowLedge?pet_type=${pet_type}`);
 };
 export const getRecommendList = (params) => {
   return xiaoms.get(
