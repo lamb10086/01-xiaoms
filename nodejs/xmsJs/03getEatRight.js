@@ -41,9 +41,7 @@ function finish() {
         "\t" +
         alldata[i].child[j].title +
         "\t" +
-        "'" +
         alldata[i].child[j].pic +
-        "'" +
         "\t" +
         alldata[i].child[j].fid +
         "\t" +

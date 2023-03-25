@@ -1,28 +1,16 @@
 <template>
   <div>
-    <van-search
-      v-model="keyword"
-      placeholder="请输入搜索关键词"
-      shape="round"
-      @focus="this.showAction = true"
-      @cancel="this.showAction = false"
-      :show-action="showAction"
-      @update:model-value="searching()"
-    ></van-search>
+    <van-search v-model="keyword" placeholder="请输入搜索关键词" shape="round" @focus="this.showAction = true"
+      @cancel="this.showAction = false" :show-action="showAction" @update:model-value="searching()"></van-search>
     <div class="middle-nav">
       <div class="show-nav" v-show="showAction == false">
         <van-sidebar v-model="active" class="left-nav">
           <van-sidebar-item v-for="item in leftCate" :key="item.cid">
             <template #title>
               <span>
-                <van-icon
-                  size="4vw"
-                  :name="iconName[item.cid - 1]"
-                  v-if="item.etype == 1"
-                  :color="
-                    active == item.cid - 1 ? iconColor[item.cid - 1] : '#d3d3d3'
-                  "
-                />
+                <van-icon size="4vw" :name="iconName[item.cid - 1]" v-if="item.etype == 1" :color="
+                  active == item.cid - 1 ? iconColor[item.cid - 1] : '#d3d3d3'
+                " />
                 {{ item.title }}
               </span>
             </template>
@@ -32,23 +20,14 @@
         <div class="right-nav">
           <van-cell-group v-for="item in rightCate" :key="item.title">
             <template #title>
-              <van-icon
-                :name="iconName[item.cid - 1]"
-                v-if="item.etype == 1"
-                size="4vw"
-                :color="iconColor[item.cid - 1]"
-              />
+              <van-icon :name="iconName[item.cid - 1]" v-if="item.etype == 1" size="4vw"
+                :color="iconColor[item.cid - 1]" />
               {{ item.title }}
             </template>
             <van-cell>
               <van-grid :column-num="3" :border="false" icon-size="18vw">
-                <van-grid-item
-                  v-for="food in item.child"
-                  :key="food.cid"
-                  :icon="food.pic"
-                  :text="food.title"
-                  @click="toPage(food)"
-                />
+                <van-grid-item v-for="food in item.child" :key="food.cid" :icon="food.pic" :text="food.title"
+                  @click="toPage(food)" />
               </van-grid>
             </van-cell>
           </van-cell-group>
@@ -57,12 +36,7 @@
 
       <div class="search-nav" v-show="showAction == true">
         <van-cell-group>
-          <van-cell
-            v-for="item in searchList"
-            :title="item.title"
-            :key="item.cid"
-            @click="toPage(item)"
-          />
+          <van-cell v-for="item in searchList" :title="item.title" :key="item.cid" @click="toPage(item)" />
         </van-cell-group>
       </div>
     </div>
@@ -90,6 +64,9 @@ export default {
     },
     iconColor() {
       return this.$store.state.eaticonColor;
+    },
+    pet_type() {
+      return this.$store.getters.pet_type;
     },
   },
   async created() {
@@ -122,9 +99,13 @@ export default {
     //获取右边列表
     async getrightCate() {
       let res = await getEatList({
-        pet_type: this.pet_type,
-        cid: this.choiceKind.cid,
-        etype: this.choiceKind.etype,
+        data: {
+          pet_type: this.pet_type,
+          cid: this.choiceKind.cid,
+          etype: this.choiceKind.etype,
+        },
+        leftCate: this.leftCate
+
       });
       this.rightCate = res.data.rightCate;
     },
@@ -169,6 +150,7 @@ export default {
       overflow: scroll;
     }
   }
+
   .search-nav {
     height: 100%;
     background-color: white;

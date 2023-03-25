@@ -37,7 +37,7 @@
   <bottom-column></bottom-column>
 
   <!-- 初始不显示的页面 -->
-  <van-popup v-model:show="show" position="top" round>
+  <van-popup v-model:show="show" position="top" round v-if="false">
     <van-list class="changeainmal">
       <van-cell v-for="item in 2" :key="item" :border="false" @click="changed(item)">
         <img :src="$store.state.animalUrl[item - 1]" alt="" :class="

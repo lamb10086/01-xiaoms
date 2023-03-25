@@ -7,7 +7,6 @@ const instance = axios.create({
   // baseURL: "https://mall.api.epet.com",
   //0表示无超时时间   如果请求在时间内还没有完成将被中断
   timeout: 5000,
-  headers: { "content-type": "application/x-www-form-urlencoded" },
 });
 instance.interceptors.request.use(
   function (config) {
@@ -17,6 +16,7 @@ instance.interceptors.request.use(
     //   forbidClick: false,
     //   overlay: true,
     // });
+    console.log(config);
 
     return config;
   },
