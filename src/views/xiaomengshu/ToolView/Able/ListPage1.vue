@@ -1,34 +1,12 @@
 <template>
   <div class="ac">
-    <van-tabs
-      v-model:active="active"
-      sticky
-      swipe-threshold="3"
-      offset-top="10vw"
-      v-if="!this.$route.query.word"
-    >
-      <van-tab
-        v-for="index in date.cate"
-        :title="index.title"
-        :key="index.title"
-      >
-        <van-list
-          v-model:loading="loading"
-          :finished="finished"
-          finished-text="没有更多了"
-          @load="onLoad"
-        >
-          <div
-            class="list-introduce"
-            v-for="(item, Itemindex) in date.list"
-            :key="item.cid"
-            :style="{
-              backgroundImage: `url(${
-                $store.state.ableListBack[Itemindex % 4]
+    <van-tabs v-model:active="active" sticky swipe-threshold="3" offset-top="9vw" v-if="!this.$route.query.word">
+      <van-tab v-for="index in date.cate" :title="index.title" :key="index.title">
+        <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+          <div class="list-introduce" v-for="(item, Itemindex) in date.list" :key="item.cid" :style="{
+            backgroundImage: `url(${$store.state.ableListBack[Itemindex % 4]
               })`,
-            }"
-            @click="toPageIntroduce(item)"
-          >
+          }" @click="toPageIntroduce(item)">
             <div class="left">
               <img v-lazy="item.image_url" alt="" />
             </div>
@@ -45,15 +23,9 @@
       </van-tab>
     </van-tabs>
     <template v-else>
-      <div
-        class="list-introduce"
-        v-for="(item, Itemindex) in date.list"
-        :key="item.cid"
-        :style="{
-          backgroundImage: `url(${$store.state.ableListBack[Itemindex % 4]})`,
-        }"
-        @click="toPageIntroduce(item)"
-      >
+      <div class="list-introduce" v-for="(item, Itemindex) in date.list" :key="item.cid" :style="{
+        backgroundImage: `url(${$store.state.ableListBack[Itemindex % 4]})`,
+      }" @click="toPageIntroduce(item)">
         <div class="left"><img v-lazy="item.image_url" alt="" /></div>
 
         <div class="right">
@@ -153,24 +125,30 @@ export default {
   height: 23vw;
   margin-bottom: 3vw;
   border-radius: 20px;
-  .left > img {
+
+  .left>img {
     height: 100%;
     border-radius: 20px;
   }
+
   .right {
     margin-left: 3vw;
+
     h3 {
       margin: 3vw 0;
     }
+
     p {
       margin: 0;
     }
+
     span {
       color: #666666;
       font-size: 2vw;
     }
   }
 }
+
 :root {
   --van-padding-sm: 4vw;
   --van-tabs-bottom-bar-height: 2vw;

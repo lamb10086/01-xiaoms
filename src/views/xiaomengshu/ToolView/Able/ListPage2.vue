@@ -1,45 +1,20 @@
 <template>
   <div class="ac">
-    <van-tabs
-      v-model:active="active"
-      sticky
-      swipe-threshold="3"
-      offset-top="10vw"
-    >
-      <van-tab
-        v-for="index in date.period"
-        :title="index.title"
-        :key="index.title"
-      >
+    <van-tabs v-model:active="active" sticky swipe-threshold="3" offset-top="10vw">
+      <van-tab v-for="index in date.period" :title="index.title" :key="index.title">
         <!-- 状态选择 -->
         <div class="Topbutton-nav">
-          <button
-            v-for="item in date.conclusion"
-            :key="item.id"
-            :class="buttonNum == item.id ? 'onchoice' : ''"
-            @click="buttonNum = item.id"
-          >
+          <button v-for="item in date.conclusion" :key="item.id" :class="buttonNum == item.id ? 'onchoice' : ''"
+            @click="buttonNum = item.id">
             {{ item.title }}
           </button>
         </div>
-        <van-list
-          v-model:loading="loading"
-          :finished="finished"
-          finished-text="没有更多了"
-          @load="onLoad"
-        >
-          <div
-            v-show="item.conclusion == buttonNum || buttonNum == 0"
-            class="list-introduce"
-            v-for="(item, Itemindex) in date.list"
-            :key="item.cid"
-            :style="{
-              backgroundImage: `url(${
-                $store.state.ableListBack[Itemindex % 4]
-              })`,
-            }"
-            @click="toPageIntroduce(item)"
-          >
+        <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+          <div v-show="item.conclusion == buttonNum || buttonNum == 0" class="list-introduce"
+            v-for="(item, Itemindex) in date.list" :key="item.cid" :style="{
+              backgroundImage: `url(${$store.state.ableListBack[Itemindex % 4]
+                })`,
+            }" @click="toPageIntroduce(item)">
             <div class="left">
               <img v-lazy="item.image_url" alt="" />
             </div>
@@ -47,10 +22,7 @@
             <div class="right">
               <h3>
                 {{ item.title }}
-                <van-icon
-                  :name="$store.state.ableStateImg[3 - item.conclusion]"
-                  size="4vw"
-                />
+                <van-icon :name="$store.state.ableStateImg[3 - item.conclusion]" size="4vw" />
                 <span>{{ index.title }}</span>
               </h3>
               <p>
@@ -151,17 +123,21 @@ export default {
   height: 23vw;
   margin-bottom: 3vw;
   border-radius: 20px;
-  .left > img {
+
+  .left>img {
     height: 100%;
     border-radius: 20px;
   }
+
   .right {
     margin-left: 3vw;
     width: 70%;
+
     h3 {
       margin: 3vw 0;
       font-size: 1.4rem;
     }
+
     p {
       margin: 0;
       // height: 10vw;
@@ -171,27 +147,33 @@ export default {
       -webkit-line-clamp: 2;
       overflow: hidden;
     }
+
     span {
       color: #666666;
       font-size: 1rem;
     }
   }
 }
+
 .Topbutton-nav {
   display: flex;
   justify-content: space-around;
+
   button {
     background-color: #f9f9f9;
     border: none;
     border-radius: 20px;
     padding: 1vw 5vw;
   }
+
   .onchoice {
     background-color: #ecf9ee;
     color: #41c856;
   }
+
   margin: 1vw 0 3vw 0;
 }
+
 :root {
   --van-padding-sm: 4vw;
   --van-tabs-bottom-bar-height: 2vw;
