@@ -10,7 +10,7 @@
         </template>
       </van-nav-bar>
       <van-grid v-if="showgrid" :border="false" icon-size="2.2rem" :column-num="1">
-        <van-grid-item :icon="gridImg[0]" text="返回首页" :to="{ name: 'choiceness' }" />
+        <van-grid-item :icon="gridImg[0]" text="返回首页" :to="{ name: 'xiaoms' }" />
         <!-- <van-grid-item
           :icon="gridImg[1]"
           text="商品分类"
