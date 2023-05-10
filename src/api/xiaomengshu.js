@@ -10,7 +10,7 @@ export const getRecommendList = (params) => {
 };
 
 export const getEatList = (params) => {
-  console.log("do" in params, params);
+  console.log("data" in params, params);
   if ("data" in params) return local.post("/foodList", params);
   else if ("do" in params && params.do == "Suggest") return local.post("/searchFood", params);
   else if ("do" in params && params.do == "Detail") return xiaoms.post("/v3/content/Tools/Eat.html", params);
