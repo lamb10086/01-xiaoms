@@ -200,14 +200,14 @@ function queryFoodEtypeList(callback) {
 function queryFoodList1(dataAll, callback) {
   try {
     connection.query(
-      `select * from foodList where etypeName='${lsList[parseInt(dataAll.data.cid) - 1]}';`,
+      `select * from foodList where etypeName='${lsList[parseInt(dataAll.data.cid) - 1] + "\r"}';`,
       (err, data) => {
         if (err) {
           console.log("查询foodList1失败", err);
         } else {
           console.log("查询foodList1成功");
           let { leftCate } = dataAll;
-          console.log(leftCate);
+          console.log(1, dataAll, data, lsList[parseInt(dataAll.data.cid) - 1]);
           for (let i = 0; i < leftCate.length; i++) {
             leftCate[i].child = [];
 
@@ -222,7 +222,7 @@ function queryFoodList1(dataAll, callback) {
               continue;
             }
           }
-          console.log(leftCate);
+          console.log(2, dataAll, leftCate);
           callback({ rightCate: leftCate });
         }
       }
@@ -240,7 +240,6 @@ function queryFoodList2(dataAll, callback) {
       } else {
         console.log("查询foodList2成功");
         let { leftCate } = dataAll;
-        console.log(leftCate);
         for (let i = 0; i < leftCate.length; i++) {
           leftCate[i].child = [];
           if (parseInt(leftCate[i].cid) > 3) {
@@ -249,8 +248,8 @@ function queryFoodList2(dataAll, callback) {
             continue;
           }
           for (let j = 0; j < data.length; j++) {
-            console.log(lsList[parseInt(data[j].fid) - 1]);
-            if (lsList[parseInt(leftCate[i].cid) - 1] === data[j].etypeName) {
+            console.log(lsList[parseInt(leftCate[i].cid) - 1], parseInt(data[j].fid));
+            if (lsList[parseInt(leftCate[i].cid) - 1] + "\r" === data[j].etypeName) {
               leftCate[i].child.push(data[j]);
             }
           }
@@ -260,7 +259,6 @@ function queryFoodList2(dataAll, callback) {
             continue;
           }
         }
-        console.log(leftCate);
         callback({ rightCate: leftCate });
       }
     });
